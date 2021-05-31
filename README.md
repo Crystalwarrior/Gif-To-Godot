@@ -3,7 +3,8 @@ Scripts to convert gifs to Godot-supported formats, such as AnimatedTexture or A
 
 # Usage
 Simply drag & drop your .gif onto one of the scripts. Before launching, make sure to use [Python 3](https://www.python.org/downloads/) and to [install Pillow](https://pillow.readthedocs.io/en/stable/installation.html#basic-installation) for Python.
-Both of the files will split up your gif
+
+Once you drag and drop the .gif file, the scripts will create a new folder with the same name as the gif that will split it up into frames, and a .tres with that name that is either an AnimatedTexture or an Animation depending on the script you used.
 
 ## gif_animatedtexture.py
  - Exports an AnimatedTexture resource that can be used for Sprites, Tilesets, etc.
