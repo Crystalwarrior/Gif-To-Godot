@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I51SHXD)
+
 # Gif-To-Godot
 Scripts to convert gifs to Godot-supported formats, such as AnimatedTexture or Animation files.
 
