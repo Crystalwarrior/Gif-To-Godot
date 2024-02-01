@@ -16,6 +16,8 @@ for arg in args.images:
     images += glob(arg)
 
 
+anims = []
+
 anims_dir = input("Put these where? (Leave blank if current dir) ")
 
 anim_data = """
@@ -37,6 +39,13 @@ anim_keys = """{{
 "transitions": PoolRealArray( {1} ),
 "update": 1,
 "values": [ {2} ]
+}}
+"""
+
+anim_library = """
+[resource]
+_data = {{
+{0}
 }}
 """
 
@@ -68,7 +77,7 @@ def parse_image(image):
         loop = 'true'
 
         for i, frame in enumerate(frames, 1):
-            frame_name = frame['name']
+            frame_name = frame['name'].replace('\\', '/')
             length += frame['duration']
             tres.write(f'[ext_resource path="res://{frame_name}" type="Texture" id={i}]\n')
 
@@ -86,10 +95,29 @@ def parse_image(image):
         values = ', '.join([f'ExtResource( {i+1} )' for i in range(len(frames))])
 
         tres.write(anim_keys.format(times, transitions, values))
+        anims.append(fn)
+
+def animation_library():
+    fn = f'{anims_dir}/animation_library.tres'
+    # Create animation library file.
+    with open(fn, 'w') as lib:
+        lib.write(f'[gd_resource type="AnimationLibrary" load_steps={len(anims)+1} format=2]\n\n')
+
+        data = []
+        for i, anim in enumerate(anims, 1):
+            anim_name = anim.replace('\\', '/')
+            lib.write(f'[ext_resource path="res://{anim_name}" type="Texture" id={i}]\n')
+            name = os.path.basename(os.path.splitext(anim_name)[0])
+            data.append(f'"{name}": ExtResource( {i} )')
+                
+        lib.write(anim_library.format(',\n'.join(data)))
 
 
 for image in images:
     print(f"Parsing {image}...")
     parse_image(image)
+    animation_library()
+
+print(f"Creating animation library file...")
 
 input("Done! (Press any key to close this window.)")
