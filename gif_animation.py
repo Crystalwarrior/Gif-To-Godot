@@ -49,6 +49,23 @@ _data = {{
 }}
 """
 
+
+anim_scene = """
+[gd_scene load_steps=2 format=2]
+
+[ext_resource type="AnimationLibrary" path="{0}" id=1]
+
+[node name="ImportedAnimation" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {{
+"": ExtResource( 1 )
+}}
+"""
+
 def parse_image(image):
     name = os.path.basename(os.path.splitext(image)[0])
     frames = []
@@ -112,12 +129,21 @@ def animation_library():
                 
         lib.write(anim_library.format(',\n'.join(data)))
 
+def scene():
+    fn = f'{anims_dir}/imported_animation.tscn'
+    # Create a scene file.
+    with open(fn, 'w') as tscn:                
+        tscn.write(anim_scene.format(f'res://{anims_dir}/animation_library.tres'))
+
 
 for image in images:
     print(f"Parsing {image}...")
     parse_image(image)
-    animation_library()
 
 print(f"Creating animation library file...")
+animation_library()
+
+print(f"Creating a scene file...")
+scene()
 
 input("Done! (Press any key to close this window.)")
