@@ -87,12 +87,12 @@ def parse_image(image):
             for compare in frames:
                 cmp_img = compare['image']
                 cmp_name = compare['name']
-                print(f"testing {fn} against {cmp_name}: {calcdiff(frame, cmp_img)}")
                 if calcdiff(frame, cmp_img) <= 0.0001:
+                    print(f"{fn} is too similar to {cmp_name}, reusing the latter!")
                     fn = cmp_name
                     frame = cmp_img
                     break
-            frame.save(fn)
+            frame.save(fn, optimize=True)
             frames.append({'name': fn, 'duration': im.info['duration'] / 1000.0, 'image': frame.copy()})
             index += 1
 
