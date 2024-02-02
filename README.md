@@ -9,3 +9,6 @@ Once you drag and drop the file, the script will create a new folder for you tha
 ## gif_animation.py 
  - Exports Animation resources, AnimationLibrary resource and the Scene file with a basic setup to get you started.
  - You can choose a path to nest this scene in! Note that you should put this folder as-is into Godot, and if you want to rearrange the file structure in post you should do so from within the Godot editor.
+
+Here's a gif how you can use this:
+![usage_example](https://github.com/Crystalwarrior/Gif-To-Godot/assets/3470436/b17a5299-ce7d-43ec-aa4a-04613eccc429)
