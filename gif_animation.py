@@ -1,8 +1,9 @@
 import argparse
 import os
+import numpy as np
 
 from glob import glob  
-from PIL import Image, ImageSequence
+from PIL import Image, ImageSequence, ImageChops
 
 parser = argparse.ArgumentParser(
         description='Convert any animated image(s) into frames and then create an '
@@ -66,6 +67,10 @@ libraries = {{
 }}
 """
 
+def calcdiff(im1, im2):
+    dif = ImageChops.difference(im1, im2)
+    return np.mean(np.array(dif))
+
 def parse_image(image):
     name = os.path.basename(os.path.splitext(image)[0])
     frames = []
@@ -79,8 +84,16 @@ def parse_image(image):
             if not os.path.exists(directory):
                 os.makedirs(directory)
             frame.convert(mode='RGBA')
+            for compare in frames:
+                cmp_img = compare['image']
+                cmp_name = compare['name']
+                print(f"testing {fn} against {cmp_name}: {calcdiff(frame, cmp_img)}")
+                if calcdiff(frame, cmp_img) <= 0.0001:
+                    fn = cmp_name
+                    frame = cmp_img
+                    break
             frame.save(fn)
-            frames.append({'name': fn, 'duration': im.info['duration'] / 1000.})
+            frames.append({'name': fn, 'duration': im.info['duration'] / 1000.0, 'image': frame.copy()})
             index += 1
 
     fn = f'{anims_dir}/{name}.tres'
