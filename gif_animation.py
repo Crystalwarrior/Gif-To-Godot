@@ -68,6 +68,8 @@ libraries = {{
 """
 
 def calcdiff(im1, im2):
+    if im1.mode != im2.mode:
+        return 1
     dif = ImageChops.difference(im1, im2)
     return np.mean(np.array(dif))
 
